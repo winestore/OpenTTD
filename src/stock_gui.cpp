@@ -169,12 +169,10 @@ struct StockMarketWindow : Window {
 
 				/* Company name with colour */
 				DrawCompanyIcon(entry.company, ir.left + 2, y + 2);
-				SetDParam(0, entry.company);
-				DrawString(ir.left + 20, ir.left + 150, y, STR_COMPANY_NAME, TC_BLACK, SA_LEFT);
+				DrawString(ir.left + 20, ir.left + 150, y, GetString(STR_COMPANY_NAME, entry.company), TC_BLACK, SA_LEFT);
 
 				/* Share price */
-				SetDParam(0, entry.share_price);
-				DrawString(ir.left + 155, ir.left + 230, y, STR_JUST_CURRENCY_LONG, TC_BLACK, SA_RIGHT);
+				DrawString(ir.left + 155, ir.left + 230, y, GetString(STR_JUST_CURRENCY_LONG, entry.share_price), TC_BLACK, SA_RIGHT);
 
 				/* Price change */
 				std::string change_str = FormatPriceChange(entry.share_price - entry.price_change, entry.share_price);
@@ -319,15 +317,12 @@ struct StockTradeWindow : Window {
 
 		switch (widget) {
 			case WID_ST_COMPANY_NAME: {
-				SetDParam(0, this->target_company);
-				DrawString(r.left, r.right, r.top, STR_COMPANY_NAME, TC_BLACK, SA_CENTER);
+				DrawString(r.left, r.right, r.top, GetString(STR_COMPANY_NAME, this->target_company), TC_BLACK, SA_CENTER);
 				break;
 			}
 
 			case WID_ST_SHARE_PRICE: {
-				std::string text = "Share Price: ";
-				SetDParam(0, c->shares.share_price);
-				text += GetString(STR_JUST_CURRENCY_LONG);
+				std::string text = "Share Price: " + GetString(STR_JUST_CURRENCY_LONG, c->shares.share_price);
 				DrawString(r.left, r.right, r.top, text, TC_BLACK, SA_CENTER);
 				break;
 			}
@@ -359,9 +354,7 @@ struct StockTradeWindow : Window {
 				} else {
 					total = GetShareSellProceeds(c->shares.share_price, this->quantity);
 				}
-				std::string text = this->is_buying ? "Total Cost: " : "Proceeds: ";
-				SetDParam(0, total);
-				text += GetString(STR_JUST_CURRENCY_LONG);
+				std::string text = (this->is_buying ? "Total Cost: " : "Proceeds: ") + GetString(STR_JUST_CURRENCY_LONG, total);
 				DrawString(r.left, r.right, r.top, text, TC_BLACK, SA_CENTER);
 				break;
 			}
