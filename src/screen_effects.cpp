@@ -10,6 +10,8 @@
 #include "stdafx.h"
 #include "screen_effects.h"
 #include "core/random_func.hpp"
+#include <algorithm>
+#include <cmath>
 
 #include "safeguards.h"
 

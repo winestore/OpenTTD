@@ -13,6 +13,7 @@
 #include "stdafx.h"
 #include "company_type.h"
 #include "date_type.h"
+#include <string>
 
 /** Achievement categories */
 enum class AchievementCategory : uint8_t {

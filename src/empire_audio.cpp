@@ -9,6 +9,9 @@
 
 #include "stdafx.h"
 #include "empire_audio.h"
+#include "core/random_func.hpp"
+#include <cstring>
+#include <algorithm>
 
 #include "safeguards.h"
 
@@ -344,7 +347,7 @@ void OnAudioEvent_TrainCrash()
 void OnAudioEvent_Thunder()
 {
 	/* Randomly choose near or distant thunder */
-	if (rand() % 3 == 0) {
+	if (RandomRange(3) == 0) {
 		PlaySoundEffect(SoundEffect::SFX_THUNDER_NEAR);
 		PlaySoundEffect(SoundEffect::SFX_LIGHTNING_STRIKE);
 	} else {

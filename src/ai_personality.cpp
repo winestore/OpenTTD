@@ -11,6 +11,8 @@
 #include "ai_personality.h"
 #include "company_base.h"
 #include "stock_market.h"
+#include <array>
+#include <algorithm>
 
 #include "safeguards.h"
 

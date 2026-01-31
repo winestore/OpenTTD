@@ -14,6 +14,7 @@
 #include "station_base.h"
 #include "vehicle_base.h"
 #include "core/random_func.hpp"
+#include <cmath>
 
 #include "safeguards.h"
 
