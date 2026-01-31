@@ -11,6 +11,7 @@
 #include "company_base.h"
 #include "company_func.h"
 #include "company_gui.h"
+#include "stock_market.h"
 #include "core/backup_type.hpp"
 #include "town.h"
 #include "news_func.h"
@@ -647,6 +648,9 @@ Company *DoStartupNewCompany(bool is_ai, CompanyID company = CompanyID::Invalid(
 	InvalidateWindowData(WC_LINKGRAPH_LEGEND, 0);
 	BuildOwnerLegend();
 	InvalidateWindowData(WC_SMALLMAP, 0, 1);
+
+	/* Initialize stock market data for this company */
+	InitializeCompanyShares(c->index);
 
 	if (is_ai && (!_networking || _network_server)) AI::StartNew(c->index);
 

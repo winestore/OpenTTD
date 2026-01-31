@@ -94,6 +94,22 @@ struct StockMarketWindow : Window {
 		this->BuildCompanyList();
 	}
 
+	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
+	{
+		switch (widget) {
+			case WID_STM_CAPTION:
+				return "Stock Market";
+			case WID_STM_BUY_BUTTON:
+				return "Buy Shares";
+			case WID_STM_SELL_BUTTON:
+				return "Sell Shares";
+			case WID_STM_COMPANY_INFO:
+				return "Company Info";
+			default:
+				return this->Window::GetWidgetString(widget, stringid);
+		}
+	}
+
 	void BuildCompanyList()
 	{
 		this->companies.clear();
@@ -297,6 +313,22 @@ struct StockTradeWindow : Window {
 		this->is_buying = buying;
 
 		this->InitNested(company);
+	}
+
+	std::string GetWidgetString(WidgetID widget, StringID stringid) const override
+	{
+		switch (widget) {
+			case WID_ST_CAPTION:
+				return this->is_buying ? "Buy Shares" : "Sell Shares";
+			case WID_ST_QUANTITY_LABEL:
+				return "Quantity:";
+			case WID_ST_EXECUTE:
+				return this->is_buying ? "Buy" : "Sell";
+			case WID_ST_CANCEL:
+				return "Cancel";
+			default:
+				return this->Window::GetWidgetString(widget, stringid);
+		}
 	}
 
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
