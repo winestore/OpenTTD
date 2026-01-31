@@ -12,13 +12,13 @@
 
 /** Widgets of the #StockMarketWindow class. */
 enum StockMarketWidgets : WidgetID {
-	WID_SM_CAPTION,          ///< Caption of the window.
-	WID_SM_PANEL,            ///< Main panel listing all companies.
-	WID_SM_SCROLLBAR,        ///< Scrollbar for the panel.
-	WID_SM_BUY_BUTTON,       ///< Buy shares button.
-	WID_SM_SELL_BUTTON,      ///< Sell shares button.
-	WID_SM_COMPANY_INFO,     ///< View company details button.
-	WID_SM_HISTORY_BUTTON,   ///< View price history button.
+	WID_STM_CAPTION,          ///< Caption of the window.
+	WID_STM_PANEL,            ///< Main panel listing all companies.
+	WID_STM_SCROLLBAR,        ///< Scrollbar for the panel.
+	WID_STM_BUY_BUTTON,       ///< Buy shares button.
+	WID_STM_SELL_BUTTON,      ///< Sell shares button.
+	WID_STM_COMPANY_INFO,     ///< View company details button.
+	WID_STM_HISTORY_BUTTON,   ///< View price history button.
 };
 
 /** Widgets of the #StockTradeWindow class (buy/sell dialog). */

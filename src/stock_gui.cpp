@@ -86,7 +86,7 @@ struct StockMarketWindow : Window {
 	StockMarketWindow(WindowDesc &desc, WindowNumber window_number) : Window(desc)
 	{
 		this->CreateNestedTree();
-		this->vscroll = this->GetScrollbar(WID_SM_SCROLLBAR);
+		this->vscroll = this->GetScrollbar(WID_STM_SCROLLBAR);
 		this->FinishInitNested(window_number);
 		this->BuildCompanyList();
 	}
@@ -124,7 +124,7 @@ struct StockMarketWindow : Window {
 	void UpdateWidgetSize(WidgetID widget, Dimension &size, [[maybe_unused]] const Dimension &padding, [[maybe_unused]] Dimension &fill, [[maybe_unused]] Dimension &resize) override
 	{
 		switch (widget) {
-			case WID_SM_PANEL:
+			case WID_STM_PANEL:
 				resize.height = GetCharacterHeight(FS_NORMAL) + WidgetDimensions::scaled.matrix.Vertical();
 				size.height = 10 * resize.height;  /* Show 10 companies by default */
 				break;
@@ -133,7 +133,7 @@ struct StockMarketWindow : Window {
 
 	void DrawWidget(const Rect &r, WidgetID widget) const override
 	{
-		if (widget != WID_SM_PANEL) return;
+		if (widget != WID_STM_PANEL) return;
 
 		Rect ir = r.Shrink(WidgetDimensions::scaled.framerect);
 		int line_height = GetCharacterHeight(FS_NORMAL) + WidgetDimensions::scaled.matrix.Vertical();
@@ -197,8 +197,8 @@ struct StockMarketWindow : Window {
 	void OnClick(Point pt, WidgetID widget, int click_count) override
 	{
 		switch (widget) {
-			case WID_SM_PANEL: {
-				int row = this->vscroll->GetScrolledRowFromWidget(pt.y, this, WID_SM_PANEL);
+			case WID_STM_PANEL: {
+				int row = this->vscroll->GetScrolledRowFromWidget(pt.y, this, WID_STM_PANEL);
 				row--;  /* Account for header */
 				if (row >= 0 && row < (int)this->companies.size()) {
 					this->selected_index = row;
@@ -207,21 +207,21 @@ struct StockMarketWindow : Window {
 				break;
 			}
 
-			case WID_SM_BUY_BUTTON:
+			case WID_STM_BUY_BUTTON:
 				if (this->selected_index >= 0 && this->selected_index < (int)this->companies.size()) {
 					/* TODO: Open buy shares dialog */
 					ShowStockTradeWindow(this->companies[this->selected_index].company, true);
 				}
 				break;
 
-			case WID_SM_SELL_BUTTON:
+			case WID_STM_SELL_BUTTON:
 				if (this->selected_index >= 0 && this->selected_index < (int)this->companies.size()) {
 					/* TODO: Open sell shares dialog */
 					ShowStockTradeWindow(this->companies[this->selected_index].company, false);
 				}
 				break;
 
-			case WID_SM_COMPANY_INFO:
+			case WID_STM_COMPANY_INFO:
 				if (this->selected_index >= 0 && this->selected_index < (int)this->companies.size()) {
 					ShowCompany(this->companies[this->selected_index].company);
 				}
@@ -231,7 +231,7 @@ struct StockMarketWindow : Window {
 
 	void OnResize() override
 	{
-		this->vscroll->SetCapacityFromWidget(this, WID_SM_PANEL);
+		this->vscroll->SetCapacityFromWidget(this, WID_STM_PANEL);
 	}
 
 	void OnInvalidateData([[maybe_unused]] int data = 0, [[maybe_unused]] bool gui_scope = true) override
@@ -251,21 +251,21 @@ struct StockMarketWindow : Window {
 static constexpr std::initializer_list<NWidgetPart> _nested_stock_market_widgets = {
 	NWidget(NWID_HORIZONTAL),
 		NWidget(WWT_CLOSEBOX, COLOUR_BROWN),
-		NWidget(WWT_CAPTION, COLOUR_BROWN, WID_SM_CAPTION), SetDataTip(STR_JUST_STRING1, STR_TOOLTIP_WINDOW_TITLE_DRAG_THIS), SetTextStyle(TC_WHITE),
+		NWidget(WWT_CAPTION, COLOUR_BROWN, WID_STM_CAPTION), SetDataTip(STR_JUST_STRING1, STR_TOOLTIP_WINDOW_TITLE_DRAG_THIS), SetTextStyle(TC_WHITE),
 		NWidget(WWT_SHADEBOX, COLOUR_BROWN),
 		NWidget(WWT_DEFSIZEBOX, COLOUR_BROWN),
 		NWidget(WWT_STICKYBOX, COLOUR_BROWN),
 	EndContainer(),
 	NWidget(NWID_HORIZONTAL),
-		NWidget(WWT_PANEL, COLOUR_BROWN, WID_SM_PANEL), SetResize(1, 1), SetScrollbar(WID_SM_SCROLLBAR), EndContainer(),
+		NWidget(WWT_PANEL, COLOUR_BROWN, WID_STM_PANEL), SetResize(1, 1), SetScrollbar(WID_STM_SCROLLBAR), EndContainer(),
 		NWidget(NWID_VERTICAL),
-			NWidget(NWID_VSCROLLBAR, COLOUR_BROWN, WID_SM_SCROLLBAR),
+			NWidget(NWID_VSCROLLBAR, COLOUR_BROWN, WID_STM_SCROLLBAR),
 		EndContainer(),
 	EndContainer(),
 	NWidget(NWID_HORIZONTAL),
-		NWidget(WWT_PUSHTXTBTN, COLOUR_BROWN, WID_SM_BUY_BUTTON), SetMinimalSize(80, 12), SetDataTip(STR_JUST_STRING1, STR_NULL), SetTextStyle(TC_WHITE),
-		NWidget(WWT_PUSHTXTBTN, COLOUR_BROWN, WID_SM_SELL_BUTTON), SetMinimalSize(80, 12), SetDataTip(STR_JUST_STRING1, STR_NULL), SetTextStyle(TC_WHITE),
-		NWidget(WWT_PUSHTXTBTN, COLOUR_BROWN, WID_SM_COMPANY_INFO), SetMinimalSize(80, 12), SetDataTip(STR_JUST_STRING1, STR_NULL), SetTextStyle(TC_WHITE),
+		NWidget(WWT_PUSHTXTBTN, COLOUR_BROWN, WID_STM_BUY_BUTTON), SetMinimalSize(80, 12), SetDataTip(STR_JUST_STRING1, STR_NULL), SetTextStyle(TC_WHITE),
+		NWidget(WWT_PUSHTXTBTN, COLOUR_BROWN, WID_STM_SELL_BUTTON), SetMinimalSize(80, 12), SetDataTip(STR_JUST_STRING1, STR_NULL), SetTextStyle(TC_WHITE),
+		NWidget(WWT_PUSHTXTBTN, COLOUR_BROWN, WID_STM_COMPANY_INFO), SetMinimalSize(80, 12), SetDataTip(STR_JUST_STRING1, STR_NULL), SetTextStyle(TC_WHITE),
 		NWidget(WWT_PANEL, COLOUR_BROWN), SetFill(1, 0), SetResize(1, 0), EndContainer(),
 		NWidget(WWT_RESIZEBOX, COLOUR_BROWN),
 	EndContainer(),
