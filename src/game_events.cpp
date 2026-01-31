@@ -327,9 +327,10 @@ void OnWeatherChange(const char *weather_type, bool severe)
 void OnTimeOfDayChange(const char *period)
 {
 	GameEvent event;
-	if (strcmp(period, "Dawn") == 0) {
+	std::string period_str(period);
+	if (period_str == "Dawn") {
 		event.type = GameEventType::EVT_DAWN;
-	} else if (strcmp(period, "Dusk") == 0) {
+	} else if (period_str == "Dusk") {
 		event.type = GameEventType::EVT_DUSK;
 	} else {
 		return; /* Ignore other periods */
