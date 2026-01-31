@@ -26,6 +26,7 @@
 #include "strings_func.h"
 #include "company_func.h"
 #include "company_gui.h"
+#include "stock_gui.h"
 #include "vehicle_base.h"
 #include "cheat_func.h"
 #include "transparency_gui.h"
@@ -2033,6 +2034,7 @@ struct MainToolbarWindow : Window {
 			case MTHK_SUBSIDIES: ShowSubsidiesList(); break;
 			case MTHK_STATIONS: ShowCompanyStations(_local_company); break;
 			case MTHK_FINANCES: ShowCompanyFinances(_local_company); break;
+			case MTHK_STOCKMARKET: ShowStockMarketWindow(); break;
 			case MTHK_COMPANIES: ShowCompany(_local_company); break;
 			case MTHK_STORY: ShowStoryBook(_local_company); break;
 			case MTHK_GOAL: ShowGoalsList(_local_company); break;
@@ -2124,6 +2126,7 @@ struct MainToolbarWindow : Window {
 		Hotkey(WKC_F6, "subsidies", MTHK_SUBSIDIES),
 		Hotkey(WKC_F7, "station_list", MTHK_STATIONS),
 		Hotkey(WKC_F8, "finances", MTHK_FINANCES),
+		Hotkey(WKC_CTRL | 'S', "stockmarket", MTHK_STOCKMARKET),
 		Hotkey(WKC_F9, "companies", MTHK_COMPANIES),
 		Hotkey(0, "story_book", MTHK_STORY),
 		Hotkey(0, "goal_list", MTHK_GOAL),
