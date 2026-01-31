@@ -14,6 +14,7 @@
 #include "station_base.h"
 #include "vehicle_base.h"
 #include "core/random_func.hpp"
+#include "3rdparty/fmt/format.h"
 #include <cmath>
 
 #include "safeguards.h"
@@ -152,7 +153,7 @@ static CompanyHealthSnapshot CalculateCompanySnapshot(Company *c)
 	uint8_t shares_owned_by_others = 0;
 	for (const Company *other : Company::Iterate()) {
 		if (other->index != c->index) {
-			shares_owned_by_others += c->share_owners[other->index.IsValid() ? other->index.base() : 0];
+			shares_owned_by_others += c->shares.shares_owned[other->index.base()];
 		}
 	}
 	snapshot.shares_available = 100 - shares_owned_by_others;
@@ -532,7 +533,7 @@ DashboardWidgetData GetDashboardWidgetData()
 		if (snapshot.health_score < 30) at_risk_companies++;
 	}
 	if (at_risk_companies > 0) {
-		data.biggest_risk = std::to_string(at_risk_companies) + " companies at risk of bankruptcy";
+		data.biggest_risk = fmt::format("{} companies at risk of bankruptcy", at_risk_companies);
 	} else if (_economy_dashboard.inflation_rate > 8) {
 		data.biggest_risk = "High inflation eroding profits";
 	} else {

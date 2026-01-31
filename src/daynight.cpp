@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "daynight.h"
 #include "settings_type.h"
+#include "3rdparty/fmt/format.h"
 
 #include "safeguards.h"
 
@@ -267,9 +268,7 @@ std::string GetTimeString()
 	uint8_t minutes = _daynight.hour_of_day % 100;
 	minutes = (minutes * 60) / 100; /* Convert from 0-99 to 0-59 */
 
-	char buffer[8];
-	snprintf(buffer, sizeof(buffer), "%02d:%02d", hours, minutes);
-	return std::string(buffer);
+	return fmt::format("{:02d}:{:02d}", hours, minutes);
 }
 
 /** Get period name */
