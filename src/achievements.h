@@ -12,7 +12,7 @@
 
 #include "stdafx.h"
 #include "company_type.h"
-#include "date_type.h"
+#include "timer/timer_game_calendar.h"
 #include <string>
 
 /** Achievement categories */

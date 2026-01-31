@@ -12,6 +12,7 @@
 
 #include "stdafx.h"
 #include "company_type.h"
+#include "economy_type.h"
 #include "core/random_func.hpp"
 #include <string>
 #include <vector>
