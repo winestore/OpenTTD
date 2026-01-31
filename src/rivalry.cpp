@@ -13,6 +13,7 @@
 #include "ceo_dialogue.h"
 #include "empire_news.h"
 #include "game_events.h"
+#include <utility>
 
 #include "safeguards.h"
 

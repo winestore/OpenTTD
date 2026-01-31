@@ -13,6 +13,8 @@
 #include "stdafx.h"
 #include "company_type.h"
 #include "core/random_func.hpp"
+#include <string>
+#include <vector>
 
 /** CEO personality archetypes - each has unique strategies and behaviors */
 enum class CEOPersonality : uint8_t {

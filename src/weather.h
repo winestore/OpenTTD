@@ -14,6 +14,7 @@
 #include "tile_type.h"
 #include "date_type.h"
 #include "core/geometry_type.hpp"
+#include <vector>
 
 /** Weather types */
 enum class WeatherType : uint8_t {

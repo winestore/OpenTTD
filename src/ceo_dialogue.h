@@ -13,6 +13,7 @@
 #include "stdafx.h"
 #include "company_type.h"
 #include "ai_personality.h"
+#include <string>
 
 /** Events that trigger CEO dialogue */
 enum class DialogueTrigger : uint8_t {

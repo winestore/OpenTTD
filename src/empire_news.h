@@ -14,6 +14,7 @@
 #include "company_type.h"
 #include "date_type.h"
 #include "ceo_dialogue.h"
+#include <string>
 
 /** News priority levels */
 enum class NewsPriority : uint8_t {

@@ -13,6 +13,10 @@
 #include "stdafx.h"
 #include "company_type.h"
 #include "date_type.h"
+#include "economy_type.h"
+#include "gfx_type.h"
+#include <string>
+#include <vector>
 
 /**
  * TRANSPORT EMPIRE ECONOMY DASHBOARD

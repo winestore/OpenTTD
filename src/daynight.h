@@ -13,6 +13,7 @@
 #include "stdafx.h"
 #include "date_type.h"
 #include "gfx_type.h"
+#include <string>
 
 /** Time of day phases */
 enum class TimeOfDay : uint8_t {

@@ -14,6 +14,8 @@
 #include "company_type.h"
 #include "economy_type.h"
 #include "ai_personality.h"
+#include <string>
+#include <vector>
 
 /**
  * RIVALRY SYSTEM

@@ -13,6 +13,8 @@
 #include "company_type.h"
 #include "economy_type.h"
 #include "core/bitmath_func.hpp"
+#include <array>
+#include <algorithm>
 
 /** Total shares per company (100 = 100% ownership) */
 static constexpr uint8_t TOTAL_SHARES = 100;
