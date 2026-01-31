@@ -9,7 +9,6 @@
 
 #include "stdafx.h"
 #include "daynight.h"
-#include "date_func.h"
 #include "settings_type.h"
 
 #include "safeguards.h"
@@ -76,7 +75,7 @@ static const uint16_t _sunset_by_month[] = {
 };
 
 /** Update sunrise/sunset based on month */
-void UpdateSunTimes(Month month)
+void UpdateSunTimes(TimerGameCalendar::Month month)
 {
 	_daynight.sunrise_time = _sunrise_by_month[month];
 	_daynight.sunset_time = _sunset_by_month[month];
@@ -132,7 +131,7 @@ void UpdateDayNight()
 	_daynight.star_visibility = GetStarVisibility();
 
 	/* Update sun times at month change */
-	static Month last_month = 255;
+	static TimerGameCalendar::Month last_month = static_cast<TimerGameCalendar::Month>(255);
 	if (last_month != TimerGameCalendar::month) {
 		last_month = TimerGameCalendar::month;
 		UpdateSunTimes(last_month);

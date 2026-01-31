@@ -10,7 +10,6 @@
 #include "stdafx.h"
 #include "weather.h"
 #include "core/random_func.hpp"
-#include "date_func.h"
 #include "landscape.h"
 #include "settings_type.h"
 
@@ -86,7 +85,7 @@ static const uint8_t _weather_probability[4][4][static_cast<int>(WeatherType::NU
 };
 
 /** Get season from month */
-static uint8_t GetSeason(Month month)
+static uint8_t GetSeason(TimerGameCalendar::Month month)
 {
 	if (month >= 2 && month <= 4) return 0; /* Spring */
 	if (month >= 5 && month <= 7) return 1; /* Summer */
@@ -95,7 +94,7 @@ static uint8_t GetSeason(Month month)
 }
 
 /** Determine weather based on season and climate */
-WeatherType DetermineWeatherForSeason(ClimateZone zone, Month month)
+WeatherType DetermineWeatherForSeason(ClimateZone zone, TimerGameCalendar::Month month)
 {
 	uint8_t season = GetSeason(month);
 	const uint8_t *probs = _weather_probability[static_cast<uint8_t>(zone)][season];

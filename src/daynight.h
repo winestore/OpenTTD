@@ -63,7 +63,7 @@ void UpdateDayNight();
 TimeOfDay GetTimeOfDay(uint16_t hour);
 
 /** Update sunrise/sunset times based on season */
-void UpdateSunTimes(Month month);
+void UpdateSunTimes(TimerGameCalendar::Month month);
 
 /** Calculate ambient light level for current time */
 uint8_t CalculateAmbientLight(uint16_t hour, uint16_t sunrise, uint16_t sunset);

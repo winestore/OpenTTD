@@ -113,7 +113,7 @@ void SpawnWeatherParticles(int screen_width, int screen_height);
 void TriggerLightning();
 
 /** Get appropriate weather for current date/climate */
-WeatherType DetermineWeatherForSeason(ClimateZone zone, Month month);
+WeatherType DetermineWeatherForSeason(ClimateZone zone, TimerGameCalendar::Month month);
 
 /** Random weather event chance */
 bool ShouldChangeWeather();
