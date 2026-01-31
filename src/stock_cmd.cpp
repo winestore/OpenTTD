@@ -14,6 +14,7 @@
 #include "company_func.h"
 #include "command_func.h"
 #include "news_func.h"
+#include "window_func.h"
 
 #include "safeguards.h"
 
@@ -38,7 +39,7 @@ CommandCost CmdBuyShares(DoCommandFlags flags, CompanyID target_company, uint8_t
 
 	/* Check if enough shares are available */
 	if (quantity > shares.shares_available) {
-		return CommandCost(STR_ERROR_NOT_ENOUGH_SHARES_AVAILABLE);
+		return CMD_ERROR;
 	}
 
 	/* Calculate cost with broker fee */
@@ -86,7 +87,7 @@ CommandCost CmdSellShares(DoCommandFlags flags, CompanyID target_company, uint8_
 
 	/* Check if we own enough shares */
 	if (quantity > shares.shares_owned[_current_company.base()]) {
-		return CommandCost(STR_ERROR_NOT_ENOUGH_SHARES_OWNED);
+		return CMD_ERROR;
 	}
 
 	/* Calculate proceeds with broker fee */

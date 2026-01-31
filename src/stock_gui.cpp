@@ -11,6 +11,7 @@
 #include "stock_market.h"
 #include "company_base.h"
 #include "company_func.h"
+#include "company_gui.h"
 #include "window_gui.h"
 #include "window_func.h"
 #include "strings_func.h"
@@ -21,6 +22,7 @@
 #include "sortlist_type.h"
 #include "timer/timer.h"
 #include "timer/timer_window.h"
+#include "3rdparty/fmt/format.h"
 
 #include "widgets/stock_market_widget.h"
 
@@ -28,6 +30,9 @@
 #include "table/sprites.h"
 
 #include "safeguards.h"
+
+/* Forward declarations */
+void ShowStockTradeWindow(CompanyID company, bool buying);
 
 /** Colours for different price changes */
 static const uint8_t STOCK_COLOUR_UP = TC_GREEN;
@@ -58,14 +63,12 @@ static std::string FormatPriceChange(Money old_price, Money new_price)
 
 	int64_t change_percent = ((new_price - old_price) * 1000) / old_price;  // x10 for one decimal
 
-	char buffer[32];
 	if (change_percent >= 0) {
-		seprintf(buffer, lastof(buffer), "+%d.%d%%", (int)(change_percent / 10), (int)(change_percent % 10));
+		return fmt::format("+{}.{}%", change_percent / 10, change_percent % 10);
 	} else {
 		change_percent = -change_percent;
-		seprintf(buffer, lastof(buffer), "-%d.%d%%", (int)(change_percent / 10), (int)(change_percent % 10));
+		return fmt::format("-{}.{}%", change_percent / 10, change_percent % 10);
 	}
-	return std::string(buffer);
 }
 
 /** Stock market list entry */
@@ -175,17 +178,15 @@ struct StockMarketWindow : Window {
 
 				/* Price change */
 				std::string change_str = FormatPriceChange(entry.share_price - entry.price_change, entry.share_price);
-				DrawString(ir.left + 235, ir.left + 300, y, change_str, GetPriceChangeColour(entry.price_change), SA_RIGHT);
+				DrawString(ir.left + 235, ir.left + 300, y, change_str, static_cast<TextColour>(GetPriceChangeColour(entry.price_change)), SA_RIGHT);
 
 				/* Shares owned */
-				char owned_str[16];
-				seprintf(owned_str, lastof(owned_str), "%d%%", entry.shares_owned);
+				std::string owned_str = fmt::format("{}%", entry.shares_owned);
 				DrawString(ir.left + 305, ir.left + 360, y, owned_str,
 					entry.shares_owned >= CONTROLLING_INTEREST ? TC_GREEN : TC_BLACK, SA_RIGHT);
 
 				/* Shares available */
-				char avail_str[16];
-				seprintf(avail_str, lastof(avail_str), "%d%%", entry.shares_available);
+				std::string avail_str = fmt::format("{}%", entry.shares_available);
 				DrawString(ir.left + 365, ir.left + 420, y, avail_str, TC_BLACK, SA_RIGHT);
 
 				y += line_height;
@@ -324,9 +325,7 @@ struct StockTradeWindow : Window {
 			}
 
 			case WID_ST_SHARE_PRICE: {
-				char buffer[64];
-				seprintf(buffer, lastof(buffer), "Share Price: ");
-				std::string text = buffer;
+				std::string text = "Share Price: ";
 				SetDParam(0, c->shares.share_price);
 				text += GetString(STR_JUST_CURRENCY_LONG);
 				DrawString(r.left, r.right, r.top, text, TC_BLACK, SA_CENTER);
@@ -334,8 +333,7 @@ struct StockTradeWindow : Window {
 			}
 
 			case WID_ST_SHARES_AVAILABLE: {
-				char buffer[64];
-				seprintf(buffer, lastof(buffer), "Available: %d%%", c->shares.shares_available);
+				std::string buffer = fmt::format("Available: {}%", c->shares.shares_available);
 				DrawString(r.left, r.right, r.top, buffer, TC_BLACK, SA_CENTER);
 				break;
 			}
@@ -343,15 +341,13 @@ struct StockTradeWindow : Window {
 			case WID_ST_YOUR_SHARES: {
 				const Company *my = Company::GetIfValid(_local_company);
 				uint8_t owned = (my != nullptr) ? c->shares.shares_owned[_local_company.base()] : 0;
-				char buffer[64];
-				seprintf(buffer, lastof(buffer), "You Own: %d%%", owned);
+				std::string buffer = fmt::format("You Own: {}%", owned);
 				DrawString(r.left, r.right, r.top, buffer, TC_BLACK, SA_CENTER);
 				break;
 			}
 
 			case WID_ST_QUANTITY_TEXT: {
-				char buffer[16];
-				seprintf(buffer, lastof(buffer), "%d%%", this->quantity);
+				std::string buffer = fmt::format("{}%", this->quantity);
 				DrawString(r.left, r.right, r.top, buffer, TC_BLACK, SA_CENTER);
 				break;
 			}
@@ -363,9 +359,7 @@ struct StockTradeWindow : Window {
 				} else {
 					total = GetShareSellProceeds(c->shares.share_price, this->quantity);
 				}
-				char buffer[64];
-				seprintf(buffer, lastof(buffer), "%s: ", this->is_buying ? "Total Cost" : "Proceeds");
-				std::string text = buffer;
+				std::string text = this->is_buying ? "Total Cost: " : "Proceeds: ";
 				SetDParam(0, total);
 				text += GetString(STR_JUST_CURRENCY_LONG);
 				DrawString(r.left, r.right, r.top, text, TC_BLACK, SA_CENTER);
@@ -465,6 +459,3 @@ void ShowStockTradeWindow(CompanyID company, bool buying)
 {
 	new StockTradeWindow(_stock_trade_desc, company, buying);
 }
-
-/* Forward declaration for the header */
-void ShowCompany(CompanyID company);
