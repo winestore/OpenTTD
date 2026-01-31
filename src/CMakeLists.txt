@@ -51,6 +51,8 @@ add_files(
 )
 
 add_files(
+    ai_personality.cpp
+    ai_personality.h
     aircraft.h
     aircraft_cmd.cpp
     aircraft_cmd.h
@@ -136,6 +138,8 @@ add_files(
     currency.h
     date_gui.cpp
     date_gui.h
+    daynight.cpp
+    daynight.h
     debug.cpp
     debug.h
     dedicated.cpp
@@ -583,6 +587,8 @@ add_files(
     water_cmd.cpp
     water_cmd.h
     water_map.h
+    weather.cpp
+    weather.h
     waypoint.cpp
     waypoint_base.h
     waypoint_cmd.cpp
