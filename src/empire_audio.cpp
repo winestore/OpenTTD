@@ -10,7 +10,7 @@
 #include "stdafx.h"
 #include "empire_audio.h"
 #include "core/random_func.hpp"
-#include <cstring>
+#include <string>
 #include <algorithm>
 
 #include "safeguards.h"
@@ -260,15 +260,16 @@ const char *GetAmbientSoundPath(AmbientSound ambient)
 /** Update audio for weather */
 void UpdateAudioForWeather(const char *weather_type)
 {
-	if (strcmp(weather_type, "Storm") == 0 || strcmp(weather_type, "Thunderstorm") == 0) {
+	std::string weather(weather_type);
+	if (weather == "Storm" || weather == "Thunderstorm") {
 		CrossfadeAmbient(AmbientSound::AMB_RAIN_HEAVY, 2.0f);
-	} else if (strcmp(weather_type, "Heavy Rain") == 0) {
+	} else if (weather == "Heavy Rain") {
 		CrossfadeAmbient(AmbientSound::AMB_RAIN_HEAVY, 1.5f);
-	} else if (strcmp(weather_type, "Light Rain") == 0 || strcmp(weather_type, "Drizzle") == 0) {
+	} else if (weather == "Light Rain" || weather == "Drizzle") {
 		CrossfadeAmbient(AmbientSound::AMB_RAIN_LIGHT, 1.5f);
-	} else if (strcmp(weather_type, "Blizzard") == 0 || strcmp(weather_type, "Heavy Snow") == 0) {
+	} else if (weather == "Blizzard" || weather == "Heavy Snow") {
 		CrossfadeAmbient(AmbientSound::AMB_SNOW_WIND, 2.0f);
-	} else if (strcmp(weather_type, "Fog") == 0) {
+	} else if (weather == "Fog") {
 		CrossfadeAmbient(AmbientSound::AMB_NIGHT_QUIET, 2.0f);
 	} else {
 		/* Clear weather - use time-based ambient */
@@ -278,11 +279,12 @@ void UpdateAudioForWeather(const char *weather_type)
 /** Update audio for time of day */
 void UpdateAudioForTimeOfDay(const char *time_period)
 {
-	if (strcmp(time_period, "Dawn") == 0 || strcmp(time_period, "Morning") == 0) {
+	std::string period(time_period);
+	if (period == "Dawn" || period == "Morning") {
 		CrossfadeAmbient(AmbientSound::AMB_MORNING_BIRDS, 3.0f);
-	} else if (strcmp(time_period, "Midday") == 0 || strcmp(time_period, "Afternoon") == 0) {
+	} else if (period == "Midday" || period == "Afternoon") {
 		CrossfadeAmbient(AmbientSound::AMB_DAYTIME_BUSY, 2.0f);
-	} else if (strcmp(time_period, "Evening") == 0 || strcmp(time_period, "Dusk") == 0) {
+	} else if (period == "Evening" || period == "Dusk") {
 		CrossfadeAmbient(AmbientSound::AMB_EVENING_CRICKETS, 3.0f);
 	} else {
 		CrossfadeAmbient(AmbientSound::AMB_NIGHT_QUIET, 3.0f);

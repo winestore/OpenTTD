@@ -14,6 +14,7 @@
 #include "screen_effects.h"
 #include "ai_personality.h"
 #include "core/random_func.hpp"
+#include "3rdparty/fmt/format.h"
 #include <map>
 
 #include "safeguards.h"
@@ -50,7 +51,7 @@ static std::string GetCompanyNameSafe(CompanyID id)
 	Company *c = Company::GetIfValid(id);
 	if (c == nullptr) return "Unknown Company";
 	if (!c->name.empty()) return c->name;
-	return "Transport Co. #" + std::to_string(static_cast<int>(id) + 1);
+	return fmt::format("Transport Co. #{}", id.base() + 1);
 }
 
 /** Queue a news item */
@@ -84,8 +85,8 @@ void GenerateSharePurchaseNews(CompanyID buyer, CompanyID target, uint8_t shares
 	std::map<std::string, std::string> replacements = {
 		{"COMPANY", GetCompanyNameSafe(buyer)},
 		{"TARGET", GetCompanyNameSafe(target)},
-		{"AMOUNT", std::to_string(shares_bought)},
-		{"TOTAL", std::to_string(total_shares)},
+		{"AMOUNT", fmt::format("{}", shares_bought)},
+		{"TOTAL", fmt::format("{}", total_shares)},
 	};
 
 	/* Determine news importance based on stake size */
@@ -97,7 +98,7 @@ void GenerateSharePurchaseNews(CompanyID buyer, CompanyID target, uint8_t shares
 
 		/* Add CEO quote */
 		CEOPersonality personality = static_cast<CEOPersonality>(
-			static_cast<uint8_t>(buyer) % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
+			buyer.base() % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
 		);
 		news.ceo_quote = GetCEODialogue(personality, DialogueTrigger::AI_TOOK_CONTROL);
 		news.quote_personality = personality;
@@ -142,7 +143,7 @@ void GenerateHostileTakeoverNews(CompanyID acquirer, CompanyID target)
 
 	/* Defeated CEO's final words */
 	CEOPersonality defeated_personality = static_cast<CEOPersonality>(
-		static_cast<uint8_t>(target) % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
+		target.base() % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
 	);
 	news.ceo_quote = GetCEODefeatDialogue(defeated_personality);
 	news.quote_personality = defeated_personality;
@@ -352,9 +353,9 @@ void GenerateYearEndNews(int year)
 	}
 
 	std::map<std::string, std::string> replacements = {
-		{"YEAR", std::to_string(year)},
+		{"YEAR", fmt::format("{}", year)},
 		{"TOP_COMPANY", GetCompanyNameSafe(top_company)},
-		{"TOP_VALUE", std::to_string(top_value / 1000000) + "M"},
+		{"TOP_VALUE", fmt::format("{}M", top_value / 1000000)},
 		{"SUMMARY", "It was a year of growth and competition."},
 	};
 
