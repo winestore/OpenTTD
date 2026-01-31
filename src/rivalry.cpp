@@ -13,6 +13,7 @@
 #include "ceo_dialogue.h"
 #include "empire_news.h"
 #include "game_events.h"
+#include "3rdparty/fmt/format.h"
 #include <utility>
 
 #include "safeguards.h"
@@ -275,7 +276,7 @@ std::string GetRivalrySummary(CompanyID company_a, CompanyID company_b)
 	summary += "\n";
 
 	if (rel->takeover_attempts_a_to_b > 0 || rel->takeover_attempts_b_to_a > 0) {
-		summary += "Takeover attempts: " + std::to_string(rel->takeover_attempts_a_to_b + rel->takeover_attempts_b_to_a) + "\n";
+		summary += fmt::format("Takeover attempts: {}\n", rel->takeover_attempts_a_to_b + rel->takeover_attempts_b_to_a);
 	}
 
 	if (!rel->rivalry_nickname.empty()) {
