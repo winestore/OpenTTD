@@ -172,6 +172,17 @@ void InitializeCompanyShares(CompanyID company);
 void HandleStockMarketBankruptcy(CompanyID company);
 
 /**
+ * AI stock trading decision making.
+ * @param company The AI company making decisions.
+ */
+void AIStockMarketDecision(CompanyID company);
+
+/**
+ * Process AI stock market decisions for all AI companies.
+ */
+void ProcessAIStockMarketDecisions();
+
+/**
  * Get the cost to buy shares including broker fee.
  * @param share_price Price per share.
  * @param quantity Number of shares.

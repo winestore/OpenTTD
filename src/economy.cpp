@@ -49,6 +49,7 @@
 #include "cargomonitor.h"
 #include "goal_base.h"
 #include "story_base.h"
+#include "stock_market.h"
 #include "linkgraph/refresh.h"
 #include "company_cmd.h"
 #include "economy_cmd.h"
@@ -1974,6 +1975,11 @@ static const IntervalTimer<TimerGameEconomy> _economy_companies_monthly({ TimerG
 	CompaniesGenStatistics();
 	CompaniesPayInterest();
 	HandleEconomyFluctuations();
+
+	/* Stock market updates */
+	UpdateSharePrices();
+	CheckMarketEvents();
+	ProcessAIStockMarketDecisions();
 });
 
 static void DoAcquireCompany(Company *c, bool hostile_takeover)

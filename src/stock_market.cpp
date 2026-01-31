@@ -437,3 +437,103 @@ void HandleStockMarketBankruptcy(CompanyID company)
 		}
 	}
 }
+
+/**
+ * AI stock trading decision making.
+ * Called periodically for AI companies to make stock market decisions.
+ * @param company The AI company making decisions.
+ */
+void AIStockMarketDecision(CompanyID company)
+{
+	Company *ai = Company::GetIfValid(company);
+	if (ai == nullptr || !ai->is_ai) return;
+
+	/* AI personality factors (could be expanded with AIInfo settings) */
+	int aggressiveness = RandomRange(100);  /* 0-100: how aggressive in takeovers */
+	int risk_tolerance = RandomRange(100);  /* 0-100: tolerance for risky trades */
+
+	/* Consider each other company for investment */
+	for (Company *target : Company::Iterate()) {
+		if (target->index == company) continue;  /* Don't invest in self */
+
+		const CompanyShares &shares = target->shares;
+
+		/* Skip if no shares available */
+		if (shares.shares_available == 0) continue;
+
+		/* Calculate investment attractiveness */
+		int attractiveness = 0;
+
+		/* Positive sentiment = more attractive */
+		attractiveness += shares.market_sentiment / 2;
+
+		/* Recent price increase = momentum trading */
+		uint8_t prev_idx = (shares.price_history_index + SHARE_PRICE_HISTORY_SIZE - 1) % SHARE_PRICE_HISTORY_SIZE;
+		if (shares.price_history[prev_idx] > 0) {
+			int price_change_pct = ((shares.share_price - shares.price_history[prev_idx]) * 100) / shares.price_history[prev_idx];
+			attractiveness += price_change_pct * 2;
+		}
+
+		/* Good reputation = more attractive */
+		attractiveness += target->reputation.investor_confidence / 4;
+
+		/* Takeover opportunity: if we already own shares, consider buying more */
+		uint8_t our_shares = shares.shares_owned[company];
+		if (our_shares > 0 && our_shares < CONTROLLING_INTEREST) {
+			/* We have a stake, consider building to control */
+			if (aggressiveness > 70) {
+				attractiveness += 30;  /* Aggressive AI wants to complete takeover */
+			}
+		}
+
+		/* Hostile takeover opportunity */
+		if (our_shares >= CONTROLLING_INTEREST - 10 && our_shares < CONTROLLING_INTEREST) {
+			if (aggressiveness > 50) {
+				attractiveness += 50;  /* Very attractive to finish takeover */
+			}
+		}
+
+		/* Decision threshold */
+		int threshold = 50 - risk_tolerance / 2;
+
+		if (attractiveness > threshold) {
+			/* Calculate how many shares to buy */
+			uint8_t max_buy = std::min<uint8_t>(shares.shares_available, 10);  /* Max 10% per decision */
+
+			/* Check if we can afford it */
+			Money cost = GetShareBuyCost(shares.share_price, max_buy);
+			if (ai->money > cost * 2) {  /* Keep 2x the cost in reserve */
+				/* Buy shares */
+				BuyShares(company, target->index, max_buy);
+			}
+		}
+
+		/* Consider selling if we own shares and conditions are bad */
+		if (our_shares > 0 && attractiveness < -30) {
+			/* Sell some shares to cut losses */
+			uint8_t sell_qty = std::min<uint8_t>(our_shares, 5);
+			SellShares(company, target->index, sell_qty);
+		}
+	}
+
+	/* Consider issuing shares if low on cash */
+	if (ai->money < 100000 && ai->shares.shares_founder > MAX_SHARE_ISSUANCE) {
+		IssueShares(company, MAX_SHARE_ISSUANCE / 2);
+	}
+}
+
+/**
+ * Process AI stock market decisions for all AI companies.
+ * Called periodically (e.g., monthly).
+ */
+void ProcessAIStockMarketDecisions()
+{
+	for (Company *c : Company::Iterate()) {
+		if (c->is_ai) {
+			/* Only make decisions sometimes to avoid too much trading */
+			if (RandomRange(100) < 30) {  /* 30% chance each month */
+				AIStockMarketDecision(c->index);
+			}
+		}
+	}
+}
