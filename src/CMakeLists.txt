@@ -469,6 +469,8 @@ add_files(
     statusbar_gui.cpp
     statusbar_gui.h
     stdafx.h
+    stock_market.cpp
+    stock_market.h
     story.cpp
     story_base.h
     story_cmd.h

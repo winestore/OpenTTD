@@ -17,6 +17,7 @@
 #include "timer/timer_game_economy.h"
 #include "settings_type.h"
 #include "group.h"
+#include "stock_market.h"
 
 static const Money COMPANY_MAX_LOAN_DEFAULT = INT64_MIN;
 
@@ -139,6 +140,9 @@ struct Company : CompanyProperties, CompanyPool::PoolItem<&_company_pool> {
 	std::array<GroupStatistics, VEH_COMPANY_END> group_default{};  ///< NOSAVE: Statistics for the DEFAULT_GROUP group.
 
 	CompanyInfrastructure infrastructure{}; ///< NOSAVE: Counts of company owned infrastructure.
+
+	CompanyShares shares{};         ///< Stock market share ownership and pricing.
+	CompanyReputation reputation{}; ///< Public reputation and regulatory standing.
 
 	std::array<FreeUnitIDGenerator, VEH_COMPANY_END> freeunits{};
 	FreeUnitIDGenerator freegroups{};
