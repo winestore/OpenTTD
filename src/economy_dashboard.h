@@ -12,7 +12,7 @@
 
 #include "stdafx.h"
 #include "company_type.h"
-#include "date_type.h"
+#include "timer/timer_game_calendar.h"
 #include "economy_type.h"
 #include "gfx_type.h"
 #include <string>
