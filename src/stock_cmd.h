@@ -17,8 +17,8 @@ CommandCost CmdBuyShares(DoCommandFlags flags, CompanyID target_company, uint8_t
 CommandCost CmdSellShares(DoCommandFlags flags, CompanyID target_company, uint8_t quantity);
 CommandCost CmdIssueShares(DoCommandFlags flags, uint8_t quantity);
 
-DEF_CMD_TRAIT(CMD_BUY_SHARES, CmdBuyShares, {}, CMDT_MONEY_MANAGEMENT)
-DEF_CMD_TRAIT(CMD_SELL_SHARES, CmdSellShares, {}, CMDT_MONEY_MANAGEMENT)
-DEF_CMD_TRAIT(CMD_ISSUE_SHARES, CmdIssueShares, {}, CMDT_MONEY_MANAGEMENT)
+DEF_CMD_TRAIT(Commands::BuyShares, CmdBuyShares, {}, CommandType::MoneyManagement)
+DEF_CMD_TRAIT(Commands::SellShares, CmdSellShares, {}, CommandType::MoneyManagement)
+DEF_CMD_TRAIT(Commands::IssueShares, CmdIssueShares, {}, CommandType::MoneyManagement)
 
 #endif /* STOCK_CMD_H */
