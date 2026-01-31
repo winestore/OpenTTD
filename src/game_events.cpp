@@ -17,6 +17,8 @@
 #include "daynight.h"
 #include "ai_personality.h"
 #include "company_base.h"
+#include <cstring>
+#include <vector>
 
 #include "safeguards.h"
 

@@ -14,6 +14,7 @@
 #include "game_events.h"
 #include "empire_news.h"
 #include "screen_effects.h"
+#include <set>
 
 #include "safeguards.h"
 

@@ -11,6 +11,8 @@
 #define TUTORIAL_H
 
 #include "stdafx.h"
+#include <vector>
+#include <string>
 
 /**
  * TRANSPORT EMPIRE TUTORIAL SYSTEM
@@ -19,108 +21,145 @@
  * Shows contextual hints, highlights UI elements, and tracks progress.
  */
 
-/** Tutorial categories */
-enum class TutorialCategory : uint8_t {
-	BASICS,          ///< Camera, UI, basics
-	VEHICLES,        ///< Buying and managing vehicles
-	ROUTES,          ///< Creating profitable routes
-	STATIONS,        ///< Building stations
-	FINANCES,        ///< Loans, profits, budgeting
-	STOCK_MARKET,    ///< Trading shares
-	TAKEOVERS,       ///< Hostile takeovers
-	AI_RIVALS,       ///< Understanding competitors
+/** Tutorial types */
+enum class TutorialType : uint8_t {
+	NONE,
+	BASIC,           ///< Basic gameplay tutorial
+	STOCK_MARKET,    ///< Stock market mechanics
 	ADVANCED,        ///< Advanced strategies
 };
 
-/** Tutorial step definition */
+/** Tutorial step types */
+enum class TutorialStepType : uint8_t {
+	MESSAGE,         ///< Just show a message
+	BUILD_STATION,   ///< Build a station
+	BUILD_TRACK,     ///< Build track
+	BUILD_DEPOT,     ///< Build a depot
+	BUY_VEHICLE,     ///< Purchase a vehicle
+	CREATE_ORDERS,   ///< Set up vehicle orders
+	START_VEHICLE,   ///< Start a vehicle
+	OPEN_WINDOW,     ///< Open a specific window
+	BUY_SHARES,      ///< Buy shares in a company
+	WAIT_FOR_PROFIT, ///< Wait until profitable
+};
+
+/** UI elements to highlight */
+enum class TutorialHighlight : uint8_t {
+	NONE,
+	TOOLBAR_RAIL,
+	TOOLBAR_ROAD,
+	TOOLBAR_WATER,
+	TOOLBAR_AIR,
+	TOOLBAR_COMPANY,
+	DEPOT,
+	STATION,
+	VEHICLE_ORDERS,
+	VEHICLE_START,
+	STOCK_WINDOW,
+};
+
+/** Conditions to check for step completion */
+enum class TutorialCondition : uint8_t {
+	NONE,
+	STATION_BUILT,
+	STATION_COUNT_2,
+	TRACK_BUILT,
+	DEPOT_BUILT,
+	VEHICLE_BOUGHT,
+	ORDERS_CREATED,
+	VEHICLE_STARTED,
+	PROFIT_MADE,
+	SHARES_BOUGHT,
+	WINDOW_OPENED,
+};
+
+/** Contextual hint triggers */
+enum class TutorialContext : uint8_t {
+	NONE,
+	FIRST_STATION,
+	FIRST_VEHICLE,
+	LOW_FUNDS,
+	COMPETITOR_SHARES,
+	FIRST_PROFIT,
+	VEHICLE_STUCK,
+	INDUSTRY_CLOSING,
+};
+
+/** A single tutorial step */
 struct TutorialStep {
-	std::string id;
-	std::string title;
-	std::string description;
-	std::string hint;
-	std::string completion_trigger;  ///< What action completes this step
-	std::string highlight_element;   ///< UI element to highlight
-	bool requires_action;            ///< Must player do something?
-	bool can_skip;
+	TutorialStepType type;
+	const char *title;
+	const char *description;
+	TutorialHighlight highlight;
+	std::vector<TutorialCondition> conditions;
+	int target_value;
 };
 
-/** Tutorial sequence */
-struct TutorialSequence {
-	std::string id;
-	std::string name;
-	TutorialCategory category;
-	std::vector<TutorialStep> steps;
-};
-
-/** Tutorial progress state */
+/** Tutorial state */
 struct TutorialState {
-	bool tutorial_active;
-	std::string current_sequence_id;
-	size_t current_step_index;
-	std::set<std::string> completed_sequences;
-	std::set<std::string> completed_steps;
+	bool active;
+	TutorialType current_tutorial;
+	size_t current_step;
+	uint32_t completed_tutorials;    ///< Bitmask of completed tutorial types
 	bool hints_enabled;
-	bool auto_advance;
+
+	/* UI positioning */
+	int16_t arrow_position_x;
+	int16_t arrow_position_y;
+	bool show_arrow;
+	TutorialHighlight highlight;
 };
 
 /** Global tutorial state */
 extern TutorialState _tutorial;
 
-/** Built-in tutorials */
-namespace Tutorials {
-
-	/* ========== BASICS ========== */
-	extern const TutorialSequence BASICS_CAMERA;
-	extern const TutorialSequence BASICS_UI;
-
-	/* ========== VEHICLES ========== */
-	extern const TutorialSequence VEHICLES_FIRST_BUS;
-	extern const TutorialSequence VEHICLES_TRAINS;
-
-	/* ========== STOCK MARKET ========== */
-	extern const TutorialSequence STOCK_MARKET_INTRO;
-	extern const TutorialSequence STOCK_MARKET_TRADING;
-	extern const TutorialSequence STOCK_MARKET_TAKEOVER;
-}
-
 /** Initialize tutorial system */
 void InitializeTutorial();
 
-/** Start a tutorial sequence */
-bool StartTutorial(const std::string &sequence_id);
+/** Start a tutorial */
+bool StartTutorial(TutorialType type);
+
+/** Get current tutorial step */
+const TutorialStep *GetCurrentTutorialStep();
+
+/** Show the current tutorial step */
+void ShowTutorialStep();
+
+/** Check if current step conditions are met */
+bool CheckTutorialConditions();
+
+/** Check a specific condition */
+bool CheckTutorialCondition(TutorialCondition condition);
 
 /** Advance to next step */
 void AdvanceTutorialStep();
 
-/** Skip current step */
-void SkipTutorialStep();
-
 /** Complete current tutorial */
 void CompleteTutorial();
 
-/** Cancel current tutorial */
-void CancelTutorial();
-
-/** Check if action completes current step */
-void CheckTutorialTrigger(const std::string &action);
+/** Skip current tutorial */
+void SkipTutorial();
 
 /** Is tutorial active? */
 bool IsTutorialActive();
 
-/** Get current step */
-const TutorialStep *GetCurrentTutorialStep();
+/** Is specific tutorial completed? */
+bool IsTutorialCompleted(TutorialType type);
 
-/** Get all available tutorials */
-std::vector<const TutorialSequence*> GetAvailableTutorials();
-
-/** Is tutorial completed? */
-bool IsTutorialCompleted(const std::string &sequence_id);
+/** Get contextual hint for a situation */
+std::string GetContextualHint(TutorialContext context);
 
 /** Enable/disable hints */
 void SetHintsEnabled(bool enabled);
 
-/** Show contextual hint based on player action */
-void ShowContextualHint(const std::string &context);
+/** Update tutorial (call each tick) */
+void UpdateTutorial();
+
+/** Handle tutorial UI clicks */
+void HandleTutorialClick(bool skip);
+
+/** Should show tutorial prompt for new game? */
+bool ShouldShowTutorialPrompt();
 
 /** Hint messages for common situations */
 namespace Hints {

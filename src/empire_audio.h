@@ -11,6 +11,9 @@
 #define EMPIRE_AUDIO_H
 
 #include "stdafx.h"
+#include "economy_type.h"
+#include <vector>
+#include <string>
 
 /**
  * TRANSPORT EMPIRE AUDIO SYSTEM

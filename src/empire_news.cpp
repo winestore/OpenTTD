@@ -12,7 +12,9 @@
 #include "company_base.h"
 #include "ceo_dialogue.h"
 #include "screen_effects.h"
+#include "ai_personality.h"
 #include "core/random_func.hpp"
+#include <map>
 
 #include "safeguards.h"
 

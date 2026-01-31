@@ -12,6 +12,7 @@
 
 #include "stdafx.h"
 #include "company_type.h"
+#include "economy_type.h"
 #include "ai_personality.h"
 
 /**
