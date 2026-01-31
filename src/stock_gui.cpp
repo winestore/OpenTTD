@@ -109,7 +109,7 @@ struct StockMarketWindow : Window {
 
 			/* Get shares owned by current player */
 			if (Company::IsValidID(my_company)) {
-				entry.shares_owned = c->shares.shares_owned[my_company];
+				entry.shares_owned = c->shares.shares_owned[my_company.base()];
 			} else {
 				entry.shares_owned = 0;
 			}
@@ -342,7 +342,7 @@ struct StockTradeWindow : Window {
 
 			case WID_ST_YOUR_SHARES: {
 				const Company *my = Company::GetIfValid(_local_company);
-				uint8_t owned = (my != nullptr) ? c->shares.shares_owned[_local_company] : 0;
+				uint8_t owned = (my != nullptr) ? c->shares.shares_owned[_local_company.base()] : 0;
 				char buffer[64];
 				seprintf(buffer, lastof(buffer), "You Own: %d%%", owned);
 				DrawString(r.left, r.right, r.top, buffer, TC_BLACK, SA_CENTER);
@@ -393,7 +393,7 @@ struct StockTradeWindow : Window {
 					max_qty = c->shares.shares_available;
 				} else {
 					const Company *my = Company::GetIfValid(_local_company);
-					max_qty = (my != nullptr) ? c->shares.shares_owned[_local_company] : 0;
+					max_qty = (my != nullptr) ? c->shares.shares_owned[_local_company.base()] : 0;
 				}
 				if (this->quantity < max_qty) {
 					this->quantity++;

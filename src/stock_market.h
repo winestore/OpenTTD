@@ -76,17 +76,17 @@ struct CompanyShares {
 
 	/** Check if a company has controlling interest */
 	bool HasControllingInterest(CompanyID owner) const {
-		return this->shares_owned[owner] >= CONTROLLING_INTEREST;
+		return this->shares_owned[owner.base()] >= CONTROLLING_INTEREST;
 	}
 
 	/** Check if a company can force buyout */
 	bool CanForceBuyout(CompanyID owner) const {
-		return this->shares_owned[owner] >= FORCED_BUYOUT_THRESHOLD;
+		return this->shares_owned[owner.base()] >= FORCED_BUYOUT_THRESHOLD;
 	}
 
 	/** Get ownership percentage for a company */
 	uint8_t GetOwnershipPercent(CompanyID owner) const {
-		return this->shares_owned[owner];
+		return this->shares_owned[owner.base()];
 	}
 };
 

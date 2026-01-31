@@ -148,7 +148,7 @@ static uint32_t CountSharesInAICompanies(CompanyID owner)
 	uint32_t count = 0;
 	for (const Company *c : Company::Iterate()) {
 		if (c->is_ai && c->index != owner) {
-			count += c->shares.shares_owned[owner];
+			count += c->shares.shares_owned[owner.base()];
 		}
 	}
 	return count;
@@ -159,7 +159,7 @@ static uint32_t CountAICompaniesWithShares(CompanyID owner)
 {
 	uint32_t count = 0;
 	for (const Company *c : Company::Iterate()) {
-		if (c->is_ai && c->shares.shares_owned[owner] > 0) {
+		if (c->is_ai && c->shares.shares_owned[owner.base()] > 0) {
 			count++;
 		}
 	}
@@ -258,7 +258,7 @@ void CheckAchievements(CompanyID company)
 
 	/* Controlling Interest - check each AI */
 	for (const Company *target : Company::Iterate()) {
-		if (target->is_ai && target->shares.shares_owned[company] >= 51) {
+		if (target->is_ai && target->shares.shares_owned[company.base()] >= 51) {
 			if (!IsAchievementUnlocked(company, "controlling_interest")) {
 				UnlockAchievement(company, Achievements::CONTROLLING_INTEREST);
 			}

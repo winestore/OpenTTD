@@ -46,14 +46,14 @@ CommandCost CmdBuyShares(DoCommandFlags flags, CompanyID target_company, uint8_t
 
 	if (flags.Test(DoCommandFlag::Execute)) {
 		/* Execute the purchase */
-		shares.shares_owned[_current_company] += quantity;
+		shares.shares_owned[_current_company.base()] += quantity;
 		shares.shares_available -= quantity;
 
 		/* Update sentiment */
 		shares.market_sentiment = std::min<int8_t>(shares.market_sentiment + quantity / 5, 100);
 
 		/* Check for controlling interest */
-		if (shares.shares_owned[_current_company] >= CONTROLLING_INTEREST) {
+		if (shares.shares_owned[_current_company.base()] >= CONTROLLING_INTEREST) {
 			/* TODO: Add news about takeover */
 			/* AddNewsItem(...) */
 		}
@@ -85,7 +85,7 @@ CommandCost CmdSellShares(DoCommandFlags flags, CompanyID target_company, uint8_
 	CompanyShares &shares = target->shares;
 
 	/* Check if we own enough shares */
-	if (quantity > shares.shares_owned[_current_company]) {
+	if (quantity > shares.shares_owned[_current_company.base()]) {
 		return CommandCost(STR_ERROR_NOT_ENOUGH_SHARES_OWNED);
 	}
 
@@ -94,7 +94,7 @@ CommandCost CmdSellShares(DoCommandFlags flags, CompanyID target_company, uint8_
 
 	if (flags.Test(DoCommandFlag::Execute)) {
 		/* Execute the sale */
-		shares.shares_owned[_current_company] -= quantity;
+		shares.shares_owned[_current_company.base()] -= quantity;
 		shares.shares_available += quantity;
 
 		/* Update sentiment */

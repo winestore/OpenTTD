@@ -110,7 +110,7 @@ bool BuyShares(CompanyID buyer, CompanyID target, uint8_t quantity)
 
 	/* Execute the transaction */
 	buyer_company->money -= cost;
-	shares.shares_owned[buyer] += quantity;
+	shares.shares_owned[buyer.base()] += quantity;
 	shares.shares_available -= quantity;
 
 	/* The money goes to... the market (simulating various sellers) */
@@ -141,14 +141,14 @@ bool SellShares(CompanyID seller, CompanyID target, uint8_t quantity)
 	CompanyShares &shares = target_company->shares;
 
 	/* Check if seller owns enough shares */
-	if (quantity > shares.shares_owned[seller]) return false;
+	if (quantity > shares.shares_owned[seller.base()]) return false;
 
 	/* Calculate proceeds */
 	Money proceeds = GetShareSellProceeds(shares.share_price, quantity);
 
 	/* Execute the transaction */
 	seller_company->money += proceeds;
-	shares.shares_owned[seller] -= quantity;
+	shares.shares_owned[seller.base()] -= quantity;
 	shares.shares_available += quantity;
 
 	/* Update sentiment (selling pressure = negative) */
@@ -427,13 +427,13 @@ void HandleStockMarketBankruptcy(CompanyID company)
 	Money liquidation_per_share = c->bankrupt_value / TOTAL_SHARES;
 
 	for (CompanyID owner = CompanyID::Begin(); owner < MAX_COMPANIES; ++owner) {
-		uint8_t owned = c->shares.shares_owned[owner];
+		uint8_t owned = c->shares.shares_owned[owner.base()];
 		if (owned > 0) {
 			Company *shareholder = Company::GetIfValid(owner);
 			if (shareholder != nullptr) {
 				shareholder->money += liquidation_per_share * owned;
 			}
-			c->shares.shares_owned[owner] = 0;
+			c->shares.shares_owned[owner.base()] = 0;
 		}
 	}
 }
@@ -478,7 +478,7 @@ void AIStockMarketDecision(CompanyID company)
 		attractiveness += target->reputation.investor_confidence / 4;
 
 		/* Takeover opportunity: if we already own shares, consider buying more */
-		uint8_t our_shares = shares.shares_owned[company];
+		uint8_t our_shares = shares.shares_owned[company.base()];
 		if (our_shares > 0 && our_shares < CONTROLLING_INTEREST) {
 			/* We have a stake, consider building to control */
 			if (aggressiveness > 70) {
