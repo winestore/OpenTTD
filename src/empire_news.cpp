@@ -205,7 +205,7 @@ void GenerateNewCompanyNews(CompanyID company)
 	news.date = 0;
 
 	CEOPersonality personality = static_cast<CEOPersonality>(
-		static_cast<uint8_t>(company) % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
+		company.base() % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
 	);
 
 	std::string ceo_name = GenerateCEOName(personality);
@@ -250,7 +250,7 @@ void GenerateBankruptcyNews(CompanyID company, bool warning_only)
 		news.body = FormatNewsTemplate(NewsTemplates::BANKRUPTCY_BODY, replacements);
 
 		CEOPersonality personality = static_cast<CEOPersonality>(
-			static_cast<uint8_t>(company) % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
+			company.base() % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
 		);
 		news.ceo_quote = GetCEODefeatDialogue(personality);
 		news.quote_personality = personality;

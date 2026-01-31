@@ -375,7 +375,7 @@ void TriggerCEODialogue(CompanyID ai_company, DialogueTrigger trigger)
 	/* TODO: Get personality from company's AI profile */
 	/* For now, use a default based on company ID */
 	CEOPersonality personality = static_cast<CEOPersonality>(
-		static_cast<uint8_t>(ai_company) % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
+		ai_company.base() % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
 	);
 
 	std::string dialogue = GetCEODialogue(personality, trigger);

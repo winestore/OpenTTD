@@ -188,7 +188,7 @@ std::string GetRivalryResponse(CompanyID ai, RivalryAction player_action)
 {
 	/* Get AI personality */
 	CEOPersonality personality = static_cast<CEOPersonality>(
-		static_cast<uint8_t>(ai) % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
+		ai.base() % static_cast<uint8_t>(CEOPersonality::NUM_PERSONALITIES)
 	);
 
 	switch (player_action) {
