@@ -51,6 +51,7 @@ add_files(
 )
 
 add_files(
+    achievements.h
     ai_personality.cpp
     ai_personality.h
     aircraft.h
@@ -103,6 +104,8 @@ add_files(
     cargomonitor.h
     cargopacket.cpp
     cargopacket.h
+    ceo_dialogue.cpp
+    ceo_dialogue.h
     cargotype.cpp
     cargotype.h
     cheat.cpp
@@ -408,6 +411,8 @@ add_files(
     screenshot.h
     screenshot_type.h
     screenshot_pcx.cpp
+    screen_effects.cpp
+    screen_effects.h
     settingentry_gui.cpp
     settingentry_gui.h
     settings.cpp
