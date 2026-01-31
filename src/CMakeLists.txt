@@ -51,6 +51,7 @@ add_files(
 )
 
 add_files(
+    achievements.cpp
     achievements.h
     ai_personality.cpp
     ai_personality.h
