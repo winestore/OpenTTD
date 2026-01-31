@@ -169,8 +169,14 @@ add_files(
     economy.cpp
     economy_base.h
     economy_cmd.h
+    economy_dashboard.cpp
+    economy_dashboard.h
     economy_func.h
     economy_type.h
+    empire_audio.cpp
+    empire_audio.h
+    empire_news.cpp
+    empire_news.h
     effectvehicle.cpp
     effectvehicle_base.h
     effectvehicle_func.h
@@ -197,6 +203,8 @@ add_files(
     fontcache.h
     framerate_gui.cpp
     framerate_type.h
+    game_events.cpp
+    game_events.h
     gamelog.cpp
     gamelog.h
     gamelog_internal.h
@@ -366,6 +374,8 @@ add_files(
     osk_gui.cpp
     palette.cpp
     palette_func.h
+    particle_effects.cpp
+    particle_effects.h
     pbs.cpp
     pbs.h
     picker_func.h
@@ -386,6 +396,8 @@ add_files(
     random_access_file.cpp
     random_access_file_type.h
     rev.h
+    rivalry.cpp
+    rivalry.h
     road.cpp
     road.h
     road_cmd.cpp
@@ -404,6 +416,8 @@ add_files(
     roadveh_cmd.h
     roadveh_gui.cpp
     safeguards.h
+    scenarios.cpp
+    scenarios.h
     screenshot_bmp.cpp
     screenshot_gui.cpp
     screenshot_gui.h
@@ -566,6 +580,8 @@ add_files(
     tunnelbridge_cmd.cpp
     tunnelbridge_cmd.h
     tunnelbridge_map.h
+    tutorial.cpp
+    tutorial.h
     vehicle.cpp
     vehicle_base.h
     vehicle_cmd.cpp
