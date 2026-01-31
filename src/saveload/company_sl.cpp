@@ -15,6 +15,7 @@
 #include "../company_func.h"
 #include "../company_manager_face.h"
 #include "../fios.h"
+#include "../stock_market.h"
 #include "../tunnelbridge_map.h"
 #include "../tunnelbridge.h"
 #include "../station_base.h"
@@ -487,6 +488,59 @@ public:
 	void LoadCheck(CompanyProperties *cprops) const override { this->Load(cprops); }
 };
 
+class SlCompanyShares : public DefaultSaveLoadHandler<SlCompanyShares, CompanyProperties> {
+public:
+	static inline const SaveLoad description[] = {
+		SLE_ARR(CompanyShares, shares_owned,       SLE_UINT8, MAX_COMPANIES),
+		SLE_VAR(CompanyShares, shares_available,   SLE_UINT8),
+		SLE_VAR(CompanyShares, shares_founder,     SLE_UINT8),
+		SLE_VAR(CompanyShares, share_price,        SLE_INT64),
+		SLE_ARR(CompanyShares, price_history,      SLE_INT64, SHARE_PRICE_HISTORY_SIZE),
+		SLE_VAR(CompanyShares, price_history_index, SLE_UINT8),
+		SLE_VAR(CompanyShares, market_sentiment,   SLE_INT8),
+		SLE_VAR(CompanyShares, volatility,         SLE_UINT8),
+		SLE_VAR(CompanyShares, last_event,         SLE_UINT8),
+	};
+	static inline const SaveLoadCompatTable compat_description = {};
+
+	void Save(CompanyProperties *c) const override
+	{
+		SlObject(&c->shares, this->GetDescription());
+	}
+
+	void Load(CompanyProperties *c) const override
+	{
+		SlObject(&c->shares, this->GetLoadDescription());
+	}
+
+	void LoadCheck(CompanyProperties *c) const override { this->Load(c); }
+};
+
+class SlCompanyReputation : public DefaultSaveLoadHandler<SlCompanyReputation, CompanyProperties> {
+public:
+	static inline const SaveLoad description[] = {
+		SLE_VAR(CompanyReputation, public_opinion,            SLE_INT8),
+		SLE_VAR(CompanyReputation, investor_confidence,       SLE_INT8),
+		SLE_VAR(CompanyReputation, regulatory_standing,       SLE_INT8),
+		SLE_VAR(CompanyReputation, investigation_heat,        SLE_UINT8),
+		SLE_VAR(CompanyReputation, months_under_investigation, SLE_UINT8),
+		SLE_VAR(CompanyReputation, pending_fines,             SLE_INT64),
+	};
+	static inline const SaveLoadCompatTable compat_description = {};
+
+	void Save(CompanyProperties *c) const override
+	{
+		SlObject(&c->reputation, this->GetDescription());
+	}
+
+	void Load(CompanyProperties *c) const override
+	{
+		SlObject(&c->reputation, this->GetLoadDescription());
+	}
+
+	void LoadCheck(CompanyProperties *c) const override { this->Load(c); }
+};
+
 /* Save/load of companies */
 static const SaveLoad _company_desc[] = {
 	    SLE_VAR(CompanyProperties, name_2,          SLE_UINT32),
@@ -546,6 +600,8 @@ static const SaveLoad _company_desc[] = {
 	SLEG_STRUCT("cur_economy", SlCompanyEconomy),
 	SLEG_STRUCTLIST("old_economy", SlCompanyOldEconomy),
 	SLEG_CONDSTRUCTLIST("liveries", SlCompanyLiveries,                               SLV_34, SL_MAX_VERSION),
+	SLEG_CONDSTRUCT("shares", SlCompanyShares,                                       SLV_STOCK_MARKET, SL_MAX_VERSION),
+	SLEG_CONDSTRUCT("reputation", SlCompanyReputation,                               SLV_STOCK_MARKET, SL_MAX_VERSION),
 };
 
 struct PLYRChunkHandler : ChunkHandler {

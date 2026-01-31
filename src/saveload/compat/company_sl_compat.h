@@ -124,6 +124,8 @@ const SaveLoadCompat _company_sl_compat[] = {
 	SLC_VAR("cur_economy"),
 	SLC_VAR("old_economy"),
 	SLC_VAR("liveries"),
+	SLC_VAR("shares"),
+	SLC_VAR("reputation"),
 };
 
 #endif /* SAVELOAD_COMPAT_COMPANY_H */

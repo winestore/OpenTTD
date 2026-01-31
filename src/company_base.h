@@ -123,6 +123,9 @@ struct CompanyProperties {
 
 	EngineRenewList engine_renew_list = nullptr; ///< Engine renewals of this company.
 	CompanySettings settings{}; ///< settings specific for each company
+
+	CompanyShares shares{};         ///< Stock market share ownership and pricing.
+	CompanyReputation reputation{}; ///< Public reputation and regulatory standing.
 };
 
 struct Company : CompanyProperties, CompanyPool::PoolItem<&_company_pool> {
@@ -140,9 +143,6 @@ struct Company : CompanyProperties, CompanyPool::PoolItem<&_company_pool> {
 	std::array<GroupStatistics, VEH_COMPANY_END> group_default{};  ///< NOSAVE: Statistics for the DEFAULT_GROUP group.
 
 	CompanyInfrastructure infrastructure{}; ///< NOSAVE: Counts of company owned infrastructure.
-
-	CompanyShares shares{};         ///< Stock market share ownership and pricing.
-	CompanyReputation reputation{}; ///< Public reputation and regulatory standing.
 
 	std::array<FreeUnitIDGenerator, VEH_COMPANY_END> freeunits{};
 	FreeUnitIDGenerator freegroups{};
