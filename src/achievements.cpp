@@ -100,8 +100,9 @@ static CompanyAchievementState &GetAchievementState(CompanyID company)
 /** Find achievement by ID */
 static const AchievementDef *FindAchievementById(const char *id)
 {
+	std::string id_str(id);
 	for (size_t i = 0; i < NUM_ACHIEVEMENTS; i++) {
-		if (strcmp(ALL_ACHIEVEMENTS[i]->id, id) == 0) {
+		if (std::string(ALL_ACHIEVEMENTS[i]->id) == id_str) {
 			return ALL_ACHIEVEMENTS[i];
 		}
 	}
@@ -282,7 +283,7 @@ void CheckAchievements(CompanyID company)
 
 	/* Monopoly - only company left */
 	uint32_t total_companies = 0;
-	for (const Company *comp : Company::Iterate()) {
+	for ([[maybe_unused]] const Company *comp : Company::Iterate()) {
 		total_companies++;
 	}
 	if (total_companies == 1 && !IsAchievementUnlocked(company, "monopoly")) {
@@ -340,23 +341,24 @@ int32_t GetAchievementProgress(CompanyID company, const char *achievement_id)
 	}
 
 	/* Calculate progress based on achievement type */
-	if (strcmp(achievement_id, "millionaire") == 0 ||
-	    strcmp(achievement_id, "hundred_million") == 0 ||
-	    strcmp(achievement_id, "billionaire") == 0) {
+	std::string id_str(achievement_id);
+	if (id_str == "millionaire" ||
+	    id_str == "hundred_million" ||
+	    id_str == "billionaire") {
 		return static_cast<int32_t>(c->cur_economy.company_value / 1000); /* In thousands */
 	}
 
-	if (strcmp(achievement_id, "first_vehicle") == 0 ||
-	    strcmp(achievement_id, "ten_vehicles") == 0 ||
-	    strcmp(achievement_id, "fifty_vehicles") == 0 ||
-	    strcmp(achievement_id, "hundred_vehicles") == 0 ||
-	    strcmp(achievement_id, "five_hundred_vehicles") == 0 ||
-	    strcmp(achievement_id, "thousand_vehicles") == 0) {
+	if (id_str == "first_vehicle" ||
+	    id_str == "ten_vehicles" ||
+	    id_str == "fifty_vehicles" ||
+	    id_str == "hundred_vehicles" ||
+	    id_str == "five_hundred_vehicles" ||
+	    id_str == "thousand_vehicles") {
 		return CountTotalVehicles(company);
 	}
 
-	if (strcmp(achievement_id, "first_shares") == 0 ||
-	    strcmp(achievement_id, "controlling_interest") == 0) {
+	if (id_str == "first_shares" ||
+	    id_str == "controlling_interest") {
 		return CountSharesInAICompanies(company);
 	}
 
